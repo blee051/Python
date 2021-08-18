@@ -31,8 +31,8 @@ def playerCommand(p, mmap, g, l):
     correctInput = False
 
     # Checking for correct input
-    for element in g:
-        for e in element:
+    for element in g:  # Row
+        for e in element:  # Collum
             if e == coordinate:
                 if mmap[gameRow][gameCol] != ' ':
                     print("Position Already Taken")
@@ -45,7 +45,7 @@ def playerCommand(p, mmap, g, l):
         gameRow+=1
     if correctInput == False:
         print("Incorrect Input! Try Again")
-        mmap=playerCommand(p,mmap,g,l)
+        mmap=playerCommand(p,mmap,g,l)  # Inception
     return mmap
 
 
@@ -59,10 +59,10 @@ def checkConnectThree(m, lletter, pplayer):
     i=0
     r=0
     while r<3:
-        while i<3:
-            if m[i][r] == lletter:
+        while i<3:  
+            if m[i][r] == lletter: # m[row][collum]
                 rowMatchAmmount += 1 # row count
-            if m[r][i] == lletter:
+            if m[r][i] == lletter: # m[collum][row]
                 collumMatchAmmount += 1 # collum count
             i+=1
 
