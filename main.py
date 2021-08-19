@@ -1,16 +1,22 @@
-# This is Brandon's TikTakToe game:
-# Sudo: Create 3x3 Matrix list
-# Each element of the matrix have 3 representations: Blank, X, and O
-# Print Game
-# Player 1 will select a coordinates Top left, Middle middle, bottom right, etc
-# See if coordinates is available
-# If so, update Matrix. Elif Error message and tell player to choose again
-# Check for three in a row
-# -Use loop to check every possible three in-a-row
-# --If found, print win screen along with player number, elif Print TikTakTow with current matrix
-# Next player
+# ANoTheR TIKTAKTTOE GAME BUT WITH CLASS
+# SUDO: I WILL USE CLASS TO DEFINE THE PLAYER
+# PLAYER.NUMBER, PLAYER.CHARACTER,
+# I WILL USE CLASS TO DEFINE TICTAKTOE
+# TICTAKTOE.GAME_MAP, TICTAKTOE.GAME_LOCATION
+# FROM THERE I WILL MAKE THE GAME AS I DID ON THE PREVIOUS VERSION
 
-def printTikTakTow(m):
+class Player:
+    def __init__(self, number, character):
+        self.number = number
+        self.character = character
+
+class TikTakToe:
+    def __init__(self):
+        self.game_map = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+        self.game_location = [["Top Left", "Top Middle", "Top Right"], ["Middle Left", "Middle Middle", "Middle Right"],
+           ["Bottom Left", "Bottom Middle", "Bottom Right"]]
+
+def print_map(m):
     i=0
     while i<3:
         print(m[i][0]+"|"+m[i][1]+"|"+m[i][2])
@@ -19,25 +25,28 @@ def printTikTakTow(m):
         i+=1
     return
 
+def print_instructions():
+    print("These are the coordinates from which you can choose:")
+    print("   Top Left |   Top Middle  | Top Right")
+    print("Middle Left | Middle Middle | Middle Right")
+    print("Bottom Left | Bottom Middle | Bottom Right")
+    print("Please type in correctly; they are case sensitive")
+    return
 
-def playerCommand(p, mmap, g, l):
-    print("Coordinates: Top Left, Top Middle, Top Right")
-    print("Middle Left, Middle Middle, Middle Right")
-    print("Bottom Left, Bottom Middle, Bottom Right")
+def player_command(p, mmap, g, l):
     print("Player",p,": ")
     coordinate = input("Select your move:  ")
     gameRow = 0
     gameCol = 0
     correctInput = False
 
-    # Checking for correct input
-    for element in g:  # Row
-        for e in element:  # Collum
+    for element in g:
+        for e in element:
             if e == coordinate:
                 if mmap[gameRow][gameCol] != ' ':
                     print("Position Already Taken")
                 else:
-                    mmap[gameRow][gameCol] = playerLetter
+                    mmap[gameRow][gameCol] = l
                     correctInput=True
                     break
             gameCol+=1
@@ -45,76 +54,74 @@ def playerCommand(p, mmap, g, l):
         gameRow+=1
     if correctInput == False:
         print("Incorrect Input! Try Again")
-        mmap=playerCommand(p,mmap,g,l)  # Inception
+        mmap=player_command(p,mmap,g,l)
     return mmap
 
-
-def checkConnectThree(m, lletter, pplayer):
-    otherLetter = 'X'
-    if lletter == 'X':
-        otherLetter = 'O' # I forgot why i did this
+def check_connect_three(m, lletter, pplayer):
     rowMatchAmmount = 0
     collumMatchAmmount = 0
-    # We are checking the rows and collums for connect 3's by counting the letter of the current player
+
     i=0
     r=0
     while r<3:
-        while i<3:  
-            if m[i][r] == lletter: # m[row][collum]
-                rowMatchAmmount += 1 # row count
-            if m[r][i] == lletter: # m[collum][row]
-                collumMatchAmmount += 1 # collum count
+        while i<3:
+            if m[i][r] == lletter:
+                rowMatchAmmount += 1
+            if m[r][i] == lletter:
+                collumMatchAmmount += 1
             i+=1
 
         if rowMatchAmmount == 3:
-            print("Player ",pplayer," WINS!")  # WIN
+            print("Player ",pplayer," WINS!")
+            print_map(m)
             return True
         if collumMatchAmmount == 3:
-            print("Player ",pplayer,"WINS!")  # Insert Win here
+            print("Player ",pplayer,"WINS!")
+            print_map(m)
             return True
 
         rowMatchAmmount = 0
         collumMatchAmmount = 0
         i=0
         r+=1
-    # We are checking the diagnols this time
+
     diagnalOneMatch = 0
     diagnalTwoMatch = 0
     y=0
     z=2
     while y<3:
         if m[y][y] == lletter:
-            diagnalOneMatch += 1  # Diagnol count
+            diagnalOneMatch += 1
         if m[y][z] == lletter:
-            diagnalTwoMatch += 1 # Other diagnol count
+            diagnalTwoMatch += 1
         y+=1
         z-=1
 
     if diagnalOneMatch == 3:
-        print("Player ",pplayer,"WINS!")  # Win Prompt
+        print("Player ",pplayer,"WINS!")
+        print_map(m)
         return True
     if diagnalTwoMatch == 3:
-        print("Player ",pplayer,"WINS!")  # Other win Promt
+        print("Player ",pplayer,"WINS!")
+        print_map(m)
         return True
     return False
 
-#Setting up the matrix, both the virtual game and its positioning
-m = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
-gameMap = [["Top Left", "Top Middle", "Top Right"], ["Middle Left", "Middle Middle", "Middle Right"],
-           ["Bottom Left", "Bottom Middle", "Bottom Right"]]
-
-player = 1
-playerLetter = 'X'
-gameOver = False
-while gameOver == False:
-    printTikTakTow(m) #Print virtual game
-    m = playerCommand(player, m, gameMap, playerLetter) # update map
-    gameOver = checkConnectThree(m, playerLetter, player) # check victory condition
-    if player == 1:  # swap player and letter
-        player = 2
-        playerLetter = 'O'
+def change_turn(p, p1, p2):
+    if p == 1:
+        return p2
     else:
-        player = 1
-        playerLetter = 'X'
+        return p1
 
-
+# main()
+ttt1 = TikTakToe()
+player1 = Player(1, "X")
+player2 = Player(2, "O")
+current_player = Player(player1.number, player1.character)
+gameOver = False
+print_instructions()
+while gameOver == False:
+    print_map(ttt1.game_map)
+    ttt1.game_map = player_command(current_player.number, ttt1.game_map, ttt1.game_location, current_player.character)
+    gameOver = check_connect_three(ttt1.game_map, current_player.character, current_player.number)
+    current_player = change_turn(current_player.number, player1, player2)
